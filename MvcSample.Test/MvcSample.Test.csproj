@@ -94,7 +94,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="CustomDependencyResolverTest.cs" />
+    <Compile Include="FoodServiceTest.cs" />
     <Compile Include="CustomIocContainerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

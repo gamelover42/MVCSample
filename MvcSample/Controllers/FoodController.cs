@@ -9,16 +9,16 @@ namespace MvcSample.Controllers
 {
     public class FoodController : Controller
     {
-        public FoodController(IFoodRepository repo)
+        private IFoodService foodService;
+        public FoodController(IFoodService foodService)
         {
-            this.repo = repo;
+            this.foodService = foodService;
         }
-        private IFoodRepository repo;
 
         // GET: Food
         public ActionResult Index()
         {
-            return View(repo.Get());
+            return View(foodService.Get());
         }
 
         // GET: Food/Details/5
@@ -38,7 +38,7 @@ namespace MvcSample.Controllers
             try
             {
 
-                repo.Add(f);
+                foodService.Add(f);
                 return RedirectToAction("Index");
             }
             catch
@@ -52,7 +52,7 @@ namespace MvcSample.Controllers
         {
             try
             {
-                repo.Delete(id);
+                foodService.Delete(id);
                 return RedirectToAction("Index");
             }
             catch

@@ -10,6 +10,8 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+@if (Model.Count() > 0)
+{
 <table class="table">
     <tr>
         <th>
@@ -21,7 +23,8 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
@@ -30,11 +33,14 @@
             @Html.DisplayFor(modelItem => item.KCals)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Delete", "Delete", new { id = item.ID })
         </td>
     </tr>
 }
 
 </table>
+}
+else
+{
+    <div>There's nothing here yet. Enter some foods to begin.</div>
+}

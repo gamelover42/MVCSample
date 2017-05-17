@@ -121,7 +121,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="Controllers\DrinkController.cs" />
     <Compile Include="Controllers\FoodController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -129,17 +128,21 @@
     </Compile>
     <Compile Include="Models\FoodItemModels.cs" />
     <Compile Include="Models\FoodRepository.cs" />
+    <Compile Include="Models\FoodService.cs" />
     <Compile Include="Models\IFoodRepository.cs" />
+    <Compile Include="Models\IFoodService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Support\CustomIocContainer.cs" />
     <Compile Include="Support\CustomControllerFactory.cs" />
     <Compile Include="Support\ICustomIocContainer.cs" />
+    <Compile Include="Support\Registration.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\food-healthy-vegetables-potatoes.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -164,6 +167,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jumbotron_parallax.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
@@ -189,7 +193,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Drink\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

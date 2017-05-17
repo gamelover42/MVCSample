@@ -10,49 +10,40 @@ namespace MvcSample.Support
 
     public class CustomIocContainer : ICustomIocContainer
     {
-        private class Registration
-        {
-            public Registration(Type interfaceType, 
-                Type concreteType,
-                LifeCycleType lifeCycle,
-                object instance = null)
-            {
-                InterfaceType = interfaceType;
-                ConcreteType = concreteType;
-                LifeCycle = lifeCycle;
-                Instance = instance;
-            }
-            public Type InterfaceType { get; set; }
-            public Type ConcreteType { get; set; }
-            public LifeCycleType LifeCycle { get; set; }
-            public object Instance { get; internal set; }
-        }
-
-        IList<Registration> registrations = new List<Registration>();
-
-        public void RegisterType<T, C>()
-        {
-            RegisterType<T, C>(LifeCycleType.Transient, null);
-        }
-
+        //this holds the list of registered types
+        private readonly IList<TypeRegistration> registrations = new List<TypeRegistration>();
+        
+        /// <summary>
+        /// Register a type, it's concrete impementation to a single instance. Defaults to Singleton LifeCycleType.
+        /// </summary>
+        /// <typeparam name="T">Interface Type</typeparam>
+        /// <typeparam name="C">Concrete class Type</typeparam>
+        /// <param name="instance">The single class instance to use for future injections.</param>
         public void RegisterType<T, C>(object instance)
         {
-            RegisterType<T, C>(LifeCycleType.Singleton, instance);
+            registrations.Add(new TypeRegistration(typeof(T), typeof(C), LifeCycleType.Singleton, instance));
         }
 
-        public void RegisterType<T, C>(LifeCycleType lifeCycle, object instance)
+        /// <summary>
+        /// Register a type and it's concrete impementation.
+        /// </summary>
+        /// <typeparam name="T">Interface Type</typeparam>
+        /// <typeparam name="C">Concrete class Type</typeparam>
+        /// <param name="lifeCycle">(optional) Defaults to Transient LifeCycleType</param>
+        public void RegisterType<T, C>(LifeCycleType lifeCycle = LifeCycleType.Transient)
         {
-            registrations.Add(new Registration(typeof(T), typeof(C), lifeCycle, instance));
+            registrations.Add(new TypeRegistration(typeof(T), typeof(C), lifeCycle));
         }
 
         /// <summary>
         /// Registers all types from the supplied assemblies which match "suffix"
         /// </summary>
-        /// <param name="suffix"></param>
+        /// <param name="suffix">Will only search for names that end the suffix, e.g. "Controller"</param>
         /// <param name="lifeCycle"></param>
         /// <param name="assemblies"></param>
         public void RegisterTypesByAssembly(string suffix, LifeCycleType lifeCycle, params Assembly[] assemblies)
         {
+            //build a list of all types with names that end the suffix, e.g. "Controller"
             var types = from a in assemblies
                         where !a.IsDynamic
                         from t in a.GetExportedTypes()
@@ -62,25 +53,22 @@ namespace MvcSample.Support
 
             foreach (Type concreteType in types)
             {
-                registrations.Add(new Registration(concreteType, concreteType, lifeCycle));
+                registrations.Add(new TypeRegistration(concreteType, concreteType, lifeCycle));
             }
         }
 
-        public object Resolve(string v)
-        {
-            var instance = registrations
-                .Where(r => r.InterfaceType.Name.EndsWith(v))
-                .Select(r => Resolve(r.InterfaceType));
-            
-            return instance.FirstOrDefault();
-        }
-
+        /// <summary>
+        /// Creates an instance of interfaceType or finds a cached instance. Will recursively inject types
+        /// into Type constructors as long as they are registered.
+        /// </summary>
+        /// <param name="interfaceType">The Interface or Abstract Type to retrieve.</param>
+        /// <returns></returns>
         public object Resolve(Type interfaceType)
         {
             object instance = null;
             if (interfaceType != null)
             {
-                Registration reg = registrations
+                TypeRegistration reg = registrations
                     .Where(r => r.InterfaceType == interfaceType)
                     .FirstOrDefault();
 

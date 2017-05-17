@@ -2,6 +2,9 @@
 
 namespace MvcSample.Models
 {
+    /// <summary>
+    /// An interface to the Food "repository"
+    /// </summary>
     public interface IFoodRepository
     {
         void Add(FoodItem food);

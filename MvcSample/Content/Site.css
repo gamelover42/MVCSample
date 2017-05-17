@@ -22,3 +22,21 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.bg {
+  background: url('/Content/food-healthy-vegetables-potatoes.jpg') no-repeat top left;
+  background-size: 100% auto;
+  position: fixed;
+  width: 100%;
+  height: 350px; /*same height as jumbotron */
+  top:0;
+  left:0;
+  z-index: -1;
+}
+
+.jumbotron {
+  height: 350px;
+  color: white;
+  text-shadow: #444 0 1px 1px;
+  background:transparent;
+}

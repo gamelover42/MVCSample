@@ -33,7 +33,7 @@ namespace MvcSample.Test
         [Fact]
         public void TestRegisterType()
         {
-            var container = new CustomIocContainer();
+            ICustomIocContainer container = new CustomIocContainer();
             container.RegisterType<IFoo, Foo>();
             var resolved = container.Resolve(typeof(IFoo));
 
@@ -43,7 +43,7 @@ namespace MvcSample.Test
         [Fact]
         public void TestRegisterTypeWithDepends()
         {
-            var container = new CustomIocContainer();
+            ICustomIocContainer container = new CustomIocContainer();
             container.RegisterType<IFoo, Foo>();
             container.RegisterType<IBar, Bar>();
             var resolved = container.Resolve(typeof(IBar));
@@ -57,9 +57,9 @@ namespace MvcSample.Test
             //get assembly where our controllers are
             var assembly = typeof(HomeController).Assembly;
 
-            var container = new CustomIocContainer();
+            ICustomIocContainer container = new CustomIocContainer();
             container.RegisterTypesByAssembly("Controller", LifeCycleType.Transient, assembly);
-            var resolved = container.Resolve("HomeController");
+            var resolved = container.Resolve(typeof(HomeController));
 
             Assert.IsType(typeof(HomeController), resolved);
         }
@@ -70,10 +70,11 @@ namespace MvcSample.Test
             //get assembly where our controllers are
             var assembly = typeof(FoodController).Assembly;
 
-            var container = new CustomIocContainer();
+            ICustomIocContainer container = new CustomIocContainer();
             container.RegisterType<IFoodRepository, FoodRepository>();
+            container.RegisterType<IFoodService, FoodService>();
             container.RegisterTypesByAssembly("Controller", LifeCycleType.Transient, assembly);
-            var resolved = container.Resolve("FoodController");
+            var resolved = container.Resolve(typeof(FoodController));
 
             Assert.IsType(typeof(FoodController), resolved);
         }
@@ -84,18 +85,18 @@ namespace MvcSample.Test
             //get assembly where our controllers are
             var assembly = typeof(FoodController).Assembly;
 
-            var container = new CustomIocContainer();
+            ICustomIocContainer container = new CustomIocContainer();
             container.RegisterTypesByAssembly("Controller", LifeCycleType.Transient, assembly);
-            Exception ex = Assert.Throws<KeyNotFoundException>(() => container.Resolve("FoodController"));
-            Assert.Equal("interfaceType of IFoodRepository not found", ex.Message);
+            Exception ex = Assert.Throws<KeyNotFoundException>(() => container.Resolve(typeof(FoodController)));
+            Assert.Equal("interfaceType of IFoodService not found", ex.Message);
         }
 
         [Fact]
         public void TestRegisterSingleton()
         {
-            var container = new CustomIocContainer();
+            ICustomIocContainer container = new CustomIocContainer();
             var foo = new Foo();
-            container.RegisterType<IFoo, Foo>(LifeCycleType.Singleton, foo);
+            container.RegisterType<IFoo, Foo>(foo);
             var resolved = container.Resolve(typeof(IFoo));
 
             Assert.Same(foo, resolved);

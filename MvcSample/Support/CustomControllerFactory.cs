@@ -18,8 +18,6 @@ namespace MvcSample.Support
         protected override IController GetControllerInstance(RequestContext requestContext, Type controllerType)
         {
             return this.container.Resolve(controllerType) as IController;
-
-            //return base.GetControllerInstance(requestContext, controllerType);
         }
     }
 }
